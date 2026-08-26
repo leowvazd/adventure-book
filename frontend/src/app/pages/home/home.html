@@ -1,0 +1,80 @@
+<header class="hero">
+  <h1>&#10024; Adventure Awaits &#10024;</h1>
+  <p class="subtitle">
+    Embark on epic quests where every choice shapes your destiny. Explore mystical realms,
+    solve ancient mysteries, and become the hero of your own story.
+  </p>
+  @if (!loading() && !error()) {
+    <p class="book-count">&#128214; {{ books().length }} Epic Adventure{{ books().length === 1 ? '' : 's' }} Available</p>
+  }
+</header>
+
+<main class="library">
+  <h2>&#128218; The Adventure Library</h2>
+  <p class="library-subtitle">
+    Choose your next adventure from our collection of interactive tales.
+  </p>
+
+  <div class="controls">
+    <input
+      type="search"
+      class="search-input"
+      placeholder="Search adventures by title or author..."
+      [(ngModel)]="searchTerm"
+    />
+
+    @if (availableGenres().length > 0) {
+      <div class="filters">
+        @for (genre of availableGenres(); track genre) {
+          <button
+            type="button"
+            class="filter-chip"
+            [class.active]="selectedGenres().has(genre)"
+            (click)="toggleGenre(genre)"
+          >
+            {{ genre }}
+          </button>
+        }
+      </div>
+    }
+
+    <div class="filters">
+      @for (difficulty of difficultyFilters; track difficulty) {
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedDifficulty() === difficulty"
+          (click)="selectDifficulty(difficulty)"
+        >
+          {{ difficulty === 'ALL' ? 'All' : difficulty | titlecase }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p class="status">Loading the library...</p>
+  } @else if (error()) {
+    <p class="status status-error">{{ error() }}</p>
+  } @else if (filteredBooks().length === 0) {
+    <p class="status">No adventures match your search.</p>
+  } @else {
+    <div class="book-grid">
+      @for (book of filteredBooks(); track book.id) {
+        <article class="book-card">
+          <h3>{{ book.title }}</h3>
+          <p class="author">by {{ book.author }}</p>
+          <div class="badges">
+            <span class="difficulty-badge" [attr.data-difficulty]="book.difficulty">
+              {{ book.difficulty | titlecase }}
+            </span>
+            @for (genre of book.genres; track genre) {
+              <span class="genre-badge">{{ genre }}</span>
+            }
+          </div>
+          <button type="button" class="begin-quest" disabled>&#9733; Begin Quest</button>
+        </article>
+      }
+    </div>
+  }
+</main>
