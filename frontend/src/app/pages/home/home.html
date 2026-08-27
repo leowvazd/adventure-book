@@ -72,7 +72,7 @@
               <span class="genre-badge">{{ genre }}</span>
             }
           </div>
-          <button type="button" class="begin-quest" disabled>&#9733; Begin Quest</button>
+          <a class="begin-quest" [routerLink]="['/play', book.id]">&#9733; Begin Quest</a>
         </article>
       }
     </div>

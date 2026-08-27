@@ -1,0 +1,96 @@
+@if (loading()) {
+  <p class="status">Loading your adventure...</p>
+} @else if (error()) {
+  <div class="status status-error">
+    <p>{{ error() }}</p>
+    <a routerLink="/">&larr; Back to Library</a>
+  </div>
+} @else if (book()) {
+  <header class="game-header">
+    <a class="back-link" routerLink="/">&larr; Back to Library</a>
+    <span class="book-title">&#128214; {{ book()!.title }}</span>
+    <div class="header-right">
+      @if (!resumeAvailable()) {
+        <span class="health" [class.health-low]="health() <= 3">&#10084; {{ health() }}/{{ maxHealth }}</span>
+      }
+      <button
+        type="button"
+        class="save-progress"
+        [disabled]="resumeAvailable() !== null || isGameFinished()"
+        (click)="saveProgress()"
+      >
+        &#128190;
+        {{ saveStatus() === 'saving' ? 'Saving...' : saveStatus() === 'saved' ? 'Saved!' : saveStatus() === 'error' ? 'Save failed' : 'Save Progress' }}
+      </button>
+    </div>
+  </header>
+
+  <main class="game-content">
+    @if (resumeAvailable(); as progress) {
+      <article class="section-card resume-card">
+        <h2 class="choices-heading">Continue your adventure?</h2>
+        <p class="section-text">
+          You have saved progress in this book: section {{ progress.currentSectionId }},
+          {{ progress.health }}/{{ maxHealth }} health.
+        </p>
+        <div class="ending-actions">
+          <button type="button" class="choice restart" (click)="resumeGame()">&#9654; Resume</button>
+          <button type="button" class="choice back-to-library" (click)="startOver()">&#8635; Start Over</button>
+        </div>
+      </article>
+    } @else if (isDead()) {
+      <article class="section-card ending-card game-over-card">
+        <h2 class="ending-heading game-over-heading">&#128128; You Died</h2>
+        <p class="section-text">
+          {{ lastConsequence()?.text ?? 'Your wounds finally catch up with you.' }}
+        </p>
+        <div class="ending-actions">
+          <button type="button" class="choice restart" (click)="restart()">&#8635; Play Again</button>
+          <a class="choice back-to-library" routerLink="/">&larr; Back to Library</a>
+        </div>
+      </article>
+    } @else if (isEnding()) {
+      <article class="section-card ending-card">
+        <h2 class="ending-heading">&#127937; The End</h2>
+        <p class="section-text">{{ currentSection()!.text }}</p>
+        <div class="ending-actions">
+          <button type="button" class="choice restart" (click)="restart()">&#8635; Play Again</button>
+          <a class="choice back-to-library" routerLink="/">&larr; Back to Library</a>
+        </div>
+      </article>
+    } @else if (isGameOver()) {
+      <article class="section-card ending-card game-over-card">
+        <h2 class="ending-heading game-over-heading">&#128128; Game Over</h2>
+        <p class="section-text">
+          {{ currentSection()?.text ?? "This path doesn't lead anywhere - the story can't continue from here." }}
+        </p>
+        <div class="ending-actions">
+          <button type="button" class="choice restart" (click)="restart()">&#8635; Play Again</button>
+          <a class="choice back-to-library" routerLink="/">&larr; Back to Library</a>
+        </div>
+      </article>
+    } @else if (currentSection()) {
+      <article class="section-card">
+        @if (lastConsequence(); as consequence) {
+          <p class="consequence-banner" [class.consequence-loss]="consequence.type === 'LOSE_HEALTH'" [class.consequence-gain]="consequence.type === 'GAIN_HEALTH'">
+            {{ consequence.type === 'LOSE_HEALTH' ? '💔' : '✨' }}
+            {{ consequence.text }}
+            ({{ consequence.type === 'LOSE_HEALTH' ? '-' : '+' }}{{ consequence.value }} health)
+          </p>
+        }
+
+        <p class="section-text">{{ currentSection()!.text }}</p>
+
+        <h2 class="choices-heading">What do you choose?</h2>
+        <div class="choices">
+          @for (option of currentSection()!.options; track option.gotoId; let i = $index) {
+            <button type="button" class="choice" (click)="choose(option)">
+              <span class="choice-number">{{ i + 1 }}</span>
+              <span class="choice-description">{{ option.description }}</span>
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </main>
+}

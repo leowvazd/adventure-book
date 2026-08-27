@@ -1,0 +1,209 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1a2b3c;
+}
+
+.status {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #5a7290;
+
+  a {
+    color: #1a4d8f;
+    font-weight: 600;
+  }
+}
+
+.status-error {
+  color: #b3261e;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #dce8fa;
+  flex-wrap: wrap;
+}
+
+.back-link {
+  color: #1a4d8f;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.book-title {
+  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  color: #0b2545;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.health {
+  font-weight: 700;
+  color: #1a4d8f;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.health-low {
+  color: #b3261e;
+}
+
+.save-progress {
+  border: 1px solid #c3d9f5;
+  background: #f5f9ff;
+  color: #35597e;
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.game-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.section-card {
+  background: #fff;
+  border: 1px solid #dce8fa;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(11, 37, 69, 0.08);
+}
+
+.section-text {
+  line-height: 1.7;
+  font-size: 1.05rem;
+  white-space: pre-line;
+  margin: 0 0 1.75rem;
+}
+
+.choices-heading {
+  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  color: #0b2545;
+  margin: 0 0 1rem;
+  border-top: 1px solid #eef3fa;
+  padding-top: 1.25rem;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  background: #f5f9ff;
+  border: 1px solid #dce8fa;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #1a2b3c;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: #eaf2fd;
+    border-color: #93c5fd;
+  }
+}
+
+.choice-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #1a4d8f;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ending-card {
+  text-align: center;
+}
+
+.ending-heading {
+  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  color: #0b2545;
+  margin: 0 0 1rem;
+}
+
+.ending-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+
+  .choice {
+    width: auto;
+    justify-content: center;
+  }
+}
+
+.game-over-card {
+  border-color: #f3c8c3;
+}
+
+.game-over-heading {
+  color: #b3261e;
+}
+
+.consequence-banner {
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+.consequence-loss {
+  background: #fdecea;
+  color: #a13d2f;
+}
+
+.consequence-gain {
+  background: #e3f3e0;
+  color: #2f7a34;
+}
+
+.resume-card {
+  text-align: center;
+}
