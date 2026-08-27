@@ -47,7 +47,7 @@
       ]
     },
     {
-      "id": "500",
+      "id": 500,
       "text": "The door is locked.",
       "type": "NODE",
       "options": [

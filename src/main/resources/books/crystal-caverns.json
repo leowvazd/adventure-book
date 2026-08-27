@@ -178,8 +178,8 @@
     },
     {
       "id": 666,
-      "text": "An unreachable dead end. You shouldn't be here.",
-      "type": "NODE"
+      "text": "An unreachable dead end. You shouldn't be here. You died.",
+      "type": "GAME_OVER"
     }
   ]
 }

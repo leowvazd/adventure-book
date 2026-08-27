@@ -3,7 +3,6 @@
   "author": "Marina Blackwood",
   "difficulty": "MEDIUM",
   "genres": ["Adventure"],
-  "type": "",
   "sections": [
     {
       "id": 1,
@@ -16,7 +15,7 @@
         },
         {
           "description": "Interrogate the captured pirate in the brig",
-          "gotoId": 999
+          "gotoId": 20
         }
       ]
     },
@@ -237,7 +236,7 @@
     {
       "id": 666,
       "text": "An unreachable whirlpool drags you into darkness. You shouldn’t be here.",
-      "type": "NODE"
+      "type": "GAME_OVER"
     }
   ]
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class BookRepository {
     private final Map<String, Book> booksById;
 
     public BookRepository(ObjectMapper objectMapper) {
-        this.booksById = loadBooks(objectMapper);
+        this.booksById = loadBooks(objectMapper, new PathMatchingResourcePatternResolver());
     }
 
     public List<Book> findAll() {
@@ -34,10 +35,13 @@ public class BookRepository {
                 .toList();
     }
 
-    private static Map<String, Book> loadBooks(ObjectMapper objectMapper) {
+    public Optional<Book> findById(String id) {
+        return Optional.ofNullable(booksById.get(id));
+    }
+
+    static Map<String, Book> loadBooks(ObjectMapper objectMapper, ResourcePatternResolver resourcePatternResolver) {
         try {
-            Resource[] resources = new PathMatchingResourcePatternResolver()
-                    .getResources(BOOKS_LOCATION_PATTERN);
+            Resource[] resources = resourcePatternResolver.getResources(BOOKS_LOCATION_PATTERN);
 
             return Arrays.stream(resources)
                     .map(resource -> toBook(objectMapper, resource))
@@ -49,12 +53,13 @@ public class BookRepository {
     }
 
     private static Optional<Book> toBook(ObjectMapper objectMapper, Resource resource) {
+        String filename = requireNonNull(resource.getFilename());
         try {
             BookFile bookFile = objectMapper.readValue(resource.getInputStream(), BookFile.class);
-            String id = idFromFilename(requireNonNull(resource.getFilename()));
-            return Optional.of(new Book(id, bookFile.title(), bookFile.author(), bookFile.difficulty(), bookFile.genres()));
+            String id = idFromFilename(filename);
+            return Optional.of(new Book(id, bookFile.title(), bookFile.author(), bookFile.difficulty(), bookFile.genres(), bookFile.sections()));
         } catch (IOException e) {
-            log.warn("Skipping unreadable book file '{}': {}", resource.getFilename(), e.getMessage());
+            log.warn("Skipping unreadable book file '{}': {}", filename, e.getMessage());
             return Optional.empty();
         }
     }

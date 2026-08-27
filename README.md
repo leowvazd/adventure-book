@@ -4,17 +4,13 @@ Competency Interview - Adventure Book - Pictet
 
 An interactive adventure book application: Spring Boot (Java 21) backend + Angular frontend.
 
-## Status
-
-- **Objective 1 — done:** home page listing all books, with client-side search (title/author) and difficulty filter.
-- Objectives 2-5: not started yet.
-
 ## Project layout
 
 ```
 src/main/java/...          Spring Boot backend
 src/main/resources/books/  Book JSON files, loaded from the classpath at startup
 frontend/                  Angular application
+data/                      Local H2 database file (saved progress), created on first run
 ```
 
 ## Backend
@@ -27,12 +23,22 @@ mvn spring-boot:run
 
 The API starts on **http://localhost:8081**.
 
-- `GET /api/books` — returns all valid books (`id`, `title`, `author`, `difficulty`).
+- `GET /api/books` — all valid books, summary shape (`id`, `title`, `author`, `difficulty`, `genres`).
+- `GET /api/books/{id}` — one valid book, full shape including `sections` (each with its
+  `options`, each option with a `gotoId` and an optional `consequence`). 404 if the id doesn't exist.
+- `PUT /api/books/{id}/progress` — body `{ currentSectionId, health }`, upserts the save for
+  that book. 400 if the section id doesn't exist in the book or health is outside `0..10`.
+- `GET /api/books/{id}/progress` — the saved progress, or `200` with a `null` body if nothing is
+  saved yet.
+- `DELETE /api/books/{id}/progress` — clears the save.
 
-Books are loaded once at startup from `src/main/resources/books/*.json`. A book file that
-fails to parse (e.g. empty/malformed) is skipped and logged as a warning rather than
-crashing the application — `dragon-quest.json` in the provided sample data is empty and
-is skipped this way.
+Reaching a dead end during play — an authored `"type": "GAME_OVER"` section, an option pointing
+at a section id that doesn't exist, or any non-`END` section with no options — doesn't crash the
+game; it's handled client-side (`isGameOver` in `game.ts`) as a "Game Over" screen (Play Again /
+Back to Library) instead of a proper "The End". `crystal-caverns.json` and `pirates-jade-sea.json`
+both have such a section reachable from real player choices — see
+`src/main/resources/books/CHANGELOG.txt` for the intentional edits made to the sample data while
+building Objectives 2-4.
 
 ## Frontend
 
@@ -45,15 +51,8 @@ npm start   # ng serve
 ```
 
 The app starts on **http://localhost:4200** and expects the backend to be running on
-`http://localhost:8081` (CORS is enabled for `http://localhost:4200` on the backend).
+`http://localhost:8081`
 
-## Design notes
-
-- Search and difficulty filtering are done **client-side** in Angular: the backend
-  exposes a single simple `GET /api/books`, and the whole catalog is fetched once and
-  filtered in-memory using signals. This keeps the API surface minimal and the UI
-  instantly responsive, which is appropriate given the catalog is small; a larger
-  catalog would justify moving filtering server-side via query parameters instead.
-- The backend only parses `title`/`author`/`difficulty` from each book file so far
-  (`sections` is ignored) — the section/option/consequence model will be added when the
-  game itself is implemented (Objective 2).
+Routes:
+- `/` — home page / library.
+- `/play/:id` — game screen for one book.

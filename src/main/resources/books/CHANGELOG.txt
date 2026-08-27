@@ -1,0 +1,13 @@
+CHANGELOG from original sources books:
+
+CRYSTAL CAVERNS:
+scenario id 666 change to die, GAME_OVER type.
+
+DRAGON QUEST:
+adjust to invalid book
+
+PIRATES JADE SEA:
+node 999 does not exist. Changed to 20 for the story to continue
+
+THE PRISONER:
+scenario id 500. Adjust to number from string
