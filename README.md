@@ -56,3 +56,7 @@ The app starts on **http://localhost:4200** and expects the backend to be runnin
 Routes:
 - `/` — home page / library.
 - `/play/:id` — game screen for one book.
+
+## Presentation
+
+Here's a short video presentation of how the project works: **[YouTube](https://youtu.be/TW7thZsoWQ8)**
